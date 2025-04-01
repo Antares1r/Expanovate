@@ -1,0 +1,33 @@
+{
+  "name": "expanovate",
+  "version": "0.0.0",
+  "description": "A Game about letting your desires of Factorys live a free will.",
+  "main": "Main.ts",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "ts-node Main.ts"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Antares1r/Expanovate.git"
+  },
+  "keywords": [
+    "game",
+    "factories",
+    "node",
+    "raylib",
+    "noderaylib"
+  ],
+  "author": "Eric Willner",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Antares1r/Expanovate/issues"
+  },
+  "homepage": "https://github.com/Antares1r/Expanovate#readme",
+  "dependencies": {
+    "raylib": "^0.14.0"
+  },
+  "devDependencies": {
+    "@types/node": "^22.13.16"
+  }
+}
