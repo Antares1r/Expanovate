@@ -17,8 +17,9 @@ const inputPoints = [
     new InputPoint("IP1", [50, 50], [wires[0]], factories[0])
 ]
 const outputPoints = [
-
+    
 ]
+
 const Entites: Entity[] = [
     ...factories,
     ...wires,

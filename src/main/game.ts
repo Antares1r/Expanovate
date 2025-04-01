@@ -4,12 +4,15 @@ import Wire from '../entities/wire';
 import Factory from '../entities/factory';
 import InputPoint from '../entities/inputPoint';
 import { log } from 'console';
+import { CoinManager } from '../entities/moneyManagment';
 
 export class Game {
     r: typeof raylib;
     entities: Entity[]
     FCIDCOUNTER: number = 0
     IPIDCOUNTER: number = 0
+
+    coinManager: CoinManager = new CoinManager();
 
     createInputPoint(x: number, y: number, wires: Wire[]) {
         let targetFactory: Factory | null = null;

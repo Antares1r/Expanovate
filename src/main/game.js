@@ -6,10 +6,12 @@ var wire_1 = require("../entities/wire");
 var factory_1 = require("../entities/factory");
 var inputPoint_1 = require("../entities/inputPoint");
 var console_1 = require("console");
+var moneyManagment_1 = require("../entities/moneyManagment");
 var Game = /** @class */ (function () {
     function Game() {
         this.FCIDCOUNTER = 0;
         this.IPIDCOUNTER = 0;
+        this.coinManager = new moneyManagment_1.CoinManager();
         this.r = raylib;
         //this.placeFactory()
     }
@@ -37,7 +39,7 @@ var Game = /** @class */ (function () {
         this.r.DrawRectangle(this.r.GetMouseX(), this.r.GetMouseY(), 10, 10, this.r.RED);
         if (this.r.IsMouseButtonDown(this.r.MOUSE_BUTTON_RIGHT)) {
             this.createInputPoint(this.r.GetMouseX(), raylib.GetMouseY(), []);
-            (0, console_1.log)("added FC: " + this.IPIDCOUNTER);
+            (0, console_1.log)("added IP: " + this.IPIDCOUNTER);
         }
     };
     Game.prototype.placeFactory = function () {
