@@ -14,6 +14,7 @@ export class Game {
     IPIDCOUNTER: number = 0;
     placementCooldown: number = 500;
     lastPlacementTime: number = 0;
+    lastConnectionTime: number = 0;
 
     coinManager: CoinManager = new CoinManager();
     secondConnectingLevel: boolean = false;
@@ -81,6 +82,56 @@ export class Game {
         }
     }
 
+    connectWire() {
+        if (Date.now() - this.lastConnectionTime < this.placementCooldown) return;
+        
+        if(this.r.IsMouseButtonDown(this.r.MOUSE_BUTTON_LEFT)) {
+            log("Pressed Left!")
+            const mouseX = this.r.GetMouseX();
+            const mouseY = this.r.GetMouseY();
+            log("Pressed Left!" + mouseX + mouseY)
+            
+            for (const entity of this.entities) {
+                log(entity)
+                log('e')
+                if(!this.secondConnectingLevel) {
+                    log('e')
+                    if (entity instanceof InputPoint || entity instanceof OutputPoint) {
+                        const fx = entity.position[0];
+                        const fy = entity.position[1];
+                        const fw = 10;
+                        const fh = 10;
+                        
+                        if (mouseX >= fx && mouseX <= fx + fw && mouseY >= fy && mouseY <= fy + fh) {
+                            this.targetPoint1 = entity;
+                            this.secondConnectingLevel = true;
+                            log("First connection point selected");
+                            this.r.DrawLine(fx, fy, this.r.GetMouseX(), this.r.GetMouseY(), this.r.SKYBLUE)
+                            this.lastConnectionTime = Date.now();
+                            break;
+                        }
+                    }
+                } else {
+                    log('e')
+                    if (entity instanceof InputPoint || entity instanceof OutputPoint) {
+                        log('e' + this.entities)
+                        const fx = entity.position[0];
+                        const fy = entity.position[1];
+                        const fw = 10;
+                        const fh = 10;
+                        
+                        if (mouseX >= fx && mouseX <= fx + fw && mouseY >= fy && mouseY <= fy + fh) {
+                            this.targetPoint2 = entity;
+                            log("Second connection point selected");
+                            this.lastConnectionTime = Date.now();
+                            break;
+                        }
+                    }
+                }
+            }
+        }
+    }
+
     checkInput() {
         for (let i: number = 0; i <= 9; i++) {
             if (this.r.IsKeyDown(this.r.KEY_ZERO + i)) {
@@ -102,6 +153,7 @@ export class Game {
             this.placeFactory();
             this.placeInputPoint();
             this.checkInput();
+            this.connectWire();
             for (const entity of this.entities) {
                 if (entity instanceof Wire) {
                     this.r.DrawLine(entity.position[0], entity.position[1], entity.endPosition[0], entity.endPosition[1], this.r.BLUE);

@@ -5,6 +5,7 @@ var raylib = require("raylib");
 var wire_1 = require("../entities/wire");
 var factory_1 = require("../entities/factory");
 var inputPoint_1 = require("../entities/inputPoint");
+var outputPoint_1 = require("../entities/outputPoint");
 var console_1 = require("console");
 var moneyManagment_1 = require("../entities/moneyManagment");
 var Game = /** @class */ (function () {
@@ -14,6 +15,7 @@ var Game = /** @class */ (function () {
         this.IPIDCOUNTER = 0;
         this.placementCooldown = 500;
         this.lastPlacementTime = 0;
+        this.lastConnectionTime = 0;
         this.coinManager = new moneyManagment_1.CoinManager();
         this.secondConnectingLevel = false;
         this.equipIndex = 1;
@@ -80,6 +82,54 @@ var Game = /** @class */ (function () {
             this.lastPlacementTime = Date.now();
         }
     };
+    Game.prototype.connectWire = function () {
+        if (Date.now() - this.lastConnectionTime < this.placementCooldown)
+            return;
+        if (this.r.IsMouseButtonDown(this.r.MOUSE_BUTTON_LEFT)) {
+            (0, console_1.log)("Pressed Left!");
+            var mouseX = this.r.GetMouseX();
+            var mouseY = this.r.GetMouseY();
+            (0, console_1.log)("Pressed Left!" + mouseX + mouseY);
+            for (var _i = 0, _a = this.entities; _i < _a.length; _i++) {
+                var entity = _a[_i];
+                (0, console_1.log)(entity);
+                (0, console_1.log)('e');
+                if (!this.secondConnectingLevel) {
+                    (0, console_1.log)('e');
+                    if (entity instanceof inputPoint_1.default || entity instanceof outputPoint_1.default) {
+                        var fx = entity.position[0];
+                        var fy = entity.position[1];
+                        var fw = 10;
+                        var fh = 10;
+                        if (mouseX >= fx && mouseX <= fx + fw && mouseY >= fy && mouseY <= fy + fh) {
+                            this.targetPoint1 = entity;
+                            this.secondConnectingLevel = true;
+                            (0, console_1.log)("First connection point selected");
+                            this.r.DrawLine(fx, fy, this.r.GetMouseX(), this.r.GetMouseY(), this.r.SKYBLUE);
+                            this.lastConnectionTime = Date.now();
+                            break;
+                        }
+                    }
+                }
+                else {
+                    (0, console_1.log)('e');
+                    if (entity instanceof inputPoint_1.default || entity instanceof outputPoint_1.default) {
+                        (0, console_1.log)('e' + this.entities);
+                        var fx = entity.position[0];
+                        var fy = entity.position[1];
+                        var fw = 10;
+                        var fh = 10;
+                        if (mouseX >= fx && mouseX <= fx + fw && mouseY >= fy && mouseY <= fy + fh) {
+                            this.targetPoint2 = entity;
+                            (0, console_1.log)("Second connection point selected");
+                            this.lastConnectionTime = Date.now();
+                            break;
+                        }
+                    }
+                }
+            }
+        }
+    };
     Game.prototype.checkInput = function () {
         for (var i = 0; i <= 9; i++) {
             if (this.r.IsKeyDown(this.r.KEY_ZERO + i)) {
@@ -99,6 +149,7 @@ var Game = /** @class */ (function () {
             this.placeFactory();
             this.placeInputPoint();
             this.checkInput();
+            this.connectWire();
             for (var _i = 0, _a = this.entities; _i < _a.length; _i++) {
                 var entity = _a[_i];
                 if (entity instanceof wire_1.default) {
